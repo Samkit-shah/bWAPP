@@ -2,24 +2,24 @@ version: '3.8'
 
 services:
   web:
-    build: .
-    image: bwapp-php7:20240402
+    image: php:apache
+    container_name: bwapp-web
+    restart: always
+    volumes:
+      - .:/var/www/html
     ports:
       - "8080:80"
     depends_on:
       - db
-    environment:
-      - MYSQL_HOST=db
-      - MYSQL_USER=root
 
   db:
     image: mysql:5.7
+    container_name: bwapp-db
+    restart: always
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bwapp
+      MYSQL_USER: bwapp_user
+      MYSQL_PASSWORD: bwapp_pass
     ports:
       - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-
-volumes:
-  db_data:
